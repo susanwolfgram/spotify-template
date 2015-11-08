@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Spotify Template</title>
+	
+	<!-- Include libraries -->
+	<script src="https://code.jquery.com/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+	
+	<!-- Read scripts -->
+	<script src="app.js"></script>
+	<link href="app.css" type="text/css" rel="stylesheet"/>	
+	
+</head>
+<body>
+	<!-- Initiate app -->
+	<div ng-app="myApp" ng-controller="myCtrl">
+		<!-- Form -->
+		<form class="container" name="songForm">
+			<div class="form-group">
+				<label>Spotify search:</label>
+				<input name="search" placeholder="Enter your search.." ng-model="track" class="form-control"></input>
+			</div>
+			<div class="form-group">
+				<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="getSongs()" type="submit">Submit</button>
+			</div>
+		</form>
+		
+		<!-- Results -->
+		<div class="container-fixed">
+			<p ng-show="tracks.length>0" class="help-block">Click to sample</p>
+			<ul>
+				<li ng-repeat="track in tracks" class="" ng-click="play(track.preview_url)" title="{{track.name}}">{{track.name + ', by ' + track.artists[0].name}}</li>
+			</ul>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

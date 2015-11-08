@@ -1,44 +1,218 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Spotify Template</title>
-	
-	<!-- Include libraries -->
-	<script src="https://code.jquery.com/jquery.min.js"></script>
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
-	
-	<!-- Read scripts -->
-	<script src="app.js"></script>
-	<link href="app.css" type="text/css" rel="stylesheet"/>	
-	
-</head>
-<body>
-	<!-- Initiate app -->
-	<div ng-app="myApp" ng-controller="myCtrl">
-		<!-- Form -->
-		<form class="container" name="songForm">
-			<div class="form-group">
-				<label>Spotify search:</label>
-				<input name="search" placeholder="Enter your search.." ng-model="track" class="form-control"></input>
-			</div>
-			<div class="form-group">
-				<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="getSongs()" type="submit">Submit</button>
-			</div>
-		</form>
+<html lang="en">
+	<head>
+		<!-- Set meta properties -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Firebase Demo</title>
 		
-		<!-- Results -->
-		<div class="container-fixed">
-			<p ng-show="tracks.length>0" class="help-block">Click to sample</p>
-			<ul>
-				<li ng-repeat="track in tracks" class="" ng-click="play(track.preview_url)" title="{{track.name}}">{{track.name + ', by ' + track.artists[0].name}}</li>
-			</ul>
+		<!-- Styles -->
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+		<!-- Angular -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+
+		<!-- Firebase -->
+		<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+
+		<!-- AngularFire -->
+		<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.js"></script>
+
+		<!-- JQuery -->
+		<script src="https://code.jquery.com/jquery.min.js"></script>
+
+		<!-- Scripts -->
+		<link href="app.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="app.js"></script>
+
+	</head>
+
+	<!-- Initiate app and controller on body -->
+	<body ng-app="myApp" ng-controller="myCtrl">
+
+		<!-- Header with logout button -->
+		<header>
+			<div class="header log-out" ng-show="userId">
+				<p id="pageName">CrowdList
+					<span id="logout">{{users[userId].handle}}
+						<button ng-click="logOut()" class="btn btn-warning">Logout</button>
+					</span>
+				</p>	
+			</div>
+		</header>	
+		
+		<!-- Container div -->
+		<div class="container">
+			
+			<!-- Sign-in/sign-up form: show if userId isn't defined -->
+			<form name="myForm" novalidate ng-show="!userId">
+				<!-- Bind model "handle" to this input, set minimum length, and make it required -->
+				<div class="form-group">
+					<label>Handle:</label>
+					<input name="handle" class="form-control" ng-minlength="6" ng-model="handle">
+					<p ng-show="myForm.handle.$error.minlength" class="help-block">Username is too short.</p>	
+					
+					<!-- Add an error message if the length is too short -->	
+					
+				</div>	
+
+				<!-- Input for image URL -->
+				<div class="form-group">
+					<label class="imgLabel">Image URL:</label>
+					<div class="userImg" ng-show="userImage">
+						<img ng-src="{{userImage}}" height="30px" width="30px">		
+					</div>					
+					<input name="img" class="form-control" ng-model="userImage">
+				</div>
+
+				<!-- Bind model "email" to this input and make it required -->
+				<div class="form-group">
+					<label>Email:</label>
+					<input name="email" type="email" class="form-control" ng-model="email"></input>
+					<p ng-show="myForm.email.$error.email" class="help-block">Enter valid email.</p> 
+
+					<!-- Show an error message if the email is not valid -->	
+				</div>
+
+				<!-- Password -->
+				<div class="form-group">
+					<label>Password:</label>
+					<input  name="password" type="password" class="form-control" ng-model="password" required></input>      
+				</div>
+
+				<!-- Submit buttons: should only be active if certain inputs are valid -->
+				<div class="form-group">
+					<button ng-click="signUp()" ng-disabled="myForm.$invalid" type="submit" class="btn btn-primary">Sign-up</button> 
+					<button ng-click="signIn()" ng-disabled="myForm.email.$invalid || myForm.password.$invalid" type="submit" class="btn btn-primary">Sign-in</button>
+				</div>
+			</form>
+
+			<!-- Show tweets (if userId is defined) -->
+			<div ng-show="userId">
+
+				<!-- Element for writing tweets -->
+				<div class="col-md-3">
+					<div>
+						<!-- Show image of current user -->
+						<div class="userStats">
+							<div class="statsImg"> 
+								<img ng-src="{{users[userId].userImage}}" height="100px" width="100px"></img>
+							</div>
+							<div>
+								<p>My Lists</p>
+								<div>
+									 <i class="fa fa-list fa-4x"></i>
+								</div>
+							</div>
+						</div>
+						<!-- Form for creating new playlists -->
+						<div id="createNew">
+							<form name="newList" id="newList">
+							<h3>Create New List:</h3>
+								<div class="form-group">
+									<label>List Name:</label>
+									<input  ng-model="listName" name="listName" class="form-control" required></input>      
+								</div>	
+
+								<div class="form-group">
+									<label>Playlist Image URL:</label>
+									<img ng-src="{{listImage}}" ng-show="listImage" height="100px" width="100px">						
+									<input name="img" class="form-control" ng-model="listImage" required>
+								</div>
+
+								<div class="form-group">
+									<label>Description:</label>
+									<textarea placeholder="Playlist description..." ng-model="listDesc" name="text" class="form-control" required ng-maxlength="140"></textarea>
+								</div>
+								
+								<!-- Create button -->
+								<div>
+
+									<!-- Execute the tweet function when clicked -->
+									<button ng-click="create()" ng-disabled="newList.$invalid" type="submit" class="btn btn-primary">
+										<i class="fa fa-pencil-square-o"></i> Create
+									</button> 					
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!-- Show everyone's tweets! -->
+				<div class="col-md-9 listDisplay">
+					<h1>Explore Playlists</h1>
+					<!-- Use ng-repeat directive to repeat a div for each element in tweets -->
+					<div ng-repeat="list in lists | orderBy : 'time'" class="listSections">
+						<div>
+							<!-- Put an img tag that shows the userImage of that tweet -->
+							<img id="listImg" ng-click="listClicked? listClicked = false : listClicked = true" class="image" ng-src="{{list.image}}" height="100px" width="100px"></img>
+							<div class="listInfo">
+								<!-- Put in the twitter handle and time of tweet -->
+								<h2 class="title">{{list.title}}</h2>
+								<p class="handle">created by {{users[list.userId].handle}} on {{list.time | date}}</p>
+								<p class="desc">{{list.desc}}</p>
+								<i class="fa fa-heart-o" ng-click="like(list)"></i>
+								<!-- Show your total number of likes -->
+								<span>{{list.likes}}</span>
+							</div>
+
+							<div ng-show="listClicked">
+									<form name="songForm">
+										<div class="form-group">
+											<label>Spotify search:</label>
+											<input name="search" placeholder="Enter your search..." ng-model="$parent.track" class="form-control"></input>
+										</div>
+										<div class="form-group">
+											<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="getSongs()" type="submit">Submit</button>
+										</div>
+									</form>
+									
+									<div>
+										<p ng-show="tracks.length>0" class="help-block">Click to sample</p>
+										<ul>
+											<li ng-repeat="track in tracks" class="" title="{{track.name}}">{{track.name + ', by ' + track.artists[0].name}} <i class="fa fa-play" ng-click="play(track.preview_url)"></i> <i class="fa fa-plus-square" ng-click="addToList($parent.list, track)"></i></li>
+										</ul>
+									</div>
+								
+							</div>
+						</div>
+
+						<!-- Put in the text of the tweet 
+						<div class="list">
+							{{list.desc}}
+						</div>
+						-->
+						<!-- Create a section for showing tweet likes -->
+						<div class="likes">
+							<!-- Show a heart icon that, when clicked, 
+								passes your tweet to your "like" function -->
+							
+						</div>
+					</div>
+				</div>
+				<!-- Form -->
+				<!--
+				<form class="container" name="songForm">
+					<div class="form-group">
+						<label>Spotify search:</label>
+						<input name="search" placeholder="Enter your search.." ng-model="track" class="form-control"></input>
+					</div>
+					<div class="form-group">
+						<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="getSongs()" type="submit">Submit</button>
+					</div>
+				</form>
+				
+				
+				<div class="container-fixed">
+					<p ng-show="tracks.length>0" class="help-block">Click to sample</p>
+					<ul>
+						<li ng-repeat="track in tracks" class="" ng-click="play(track.preview_url)" title="{{track.name}}">{{track.name + ', by ' + track.artists[0].name}}</li>
+					</ul>
+				</div>
+				-->
+			</div>
 		</div>
-	</div>
-	</div>
-</body>
+	</body>
 </html>

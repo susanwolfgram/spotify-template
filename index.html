@@ -34,9 +34,9 @@
 
 		<!-- Header with logout button -->
 		<header>
-			<div class="header log-out" ng-show="userId">
+			<div class="header log-out">
 				<p id="pageName">CrowdList
-					<span id="logout">{{users[userId].handle}}
+					<span id="logout" ng-show="userId">{{users[userId].handle}}
 						<button ng-click="logOut()" class="btn btn-warning">Logout</button>
 					</span>
 				</p>	
@@ -44,7 +44,7 @@
 		</header>	
 		
 		<!-- Container div -->
-		<div class="container">
+		<div class="container" id="login">
 			
 			<!-- Sign-in/sign-up form: show if userId isn't defined -->
 			<form name="myForm" novalidate ng-show="!userId">
@@ -147,7 +147,7 @@
 					<div ng-repeat="list in lists | orderBy : 'time'" class="listSections">
 						<div>
 							<!-- Put an img tag that shows the userImage of that tweet -->
-							<img id="listImg" ng-click="listClicked? listClicked = false : listClicked = true" class="image" ng-src="{{list.image}}" height="100px" width="100px"></img>
+							<img id="listImg" ng-click="clicked(list); listClicked? listClicked = false : listClicked = true" class="image" ng-src="{{list.image}}" height="100px" width="100px"></img>
 							<div class="listInfo">
 								<!-- Put in the twitter handle and time of tweet -->
 								<h2 class="title">{{list.title}}</h2>
@@ -159,6 +159,12 @@
 							</div>
 
 							<div ng-show="listClicked">
+									<div>
+										<p ng-show="songs.length>0" class="help-block">Click to sample</p>
+										<ul>
+											<li ng-repeat="song in songs" class="" title="{{song.name}}">{{song.name + ', by ' + song.artists[0].name}} <i class="fa fa-play" ng-click="play(song.preview_url)"></i> <i class="fa fa-plus-square"></i></li>
+										</ul>
+									</div>
 									<form name="songForm">
 										<div class="form-group">
 											<label>Spotify search:</label>

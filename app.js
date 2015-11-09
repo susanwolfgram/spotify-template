@@ -12,6 +12,7 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
       // Create references to store tweets and users
   var dataLists = ref.child('lists');
   var dataUsers = ref.child('users'); 
+
       // Create a firebaseArray of your playlists, and store this as part of $scope
 
       // Create a firebaseObject of your users, and store this as part of $scope
@@ -94,7 +95,7 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
 
   $scope.like = function(list) {
     list.likes++; 
-    console.log('test')
+    console.log('test');
     $scope.lists.$save(list);
   }
 
@@ -121,14 +122,21 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
     }
   }
 
+  var key = ""; 
+  var arr = [];
   $scope.addToList = function(list, track) {
-    dataLists.child(list).set({
-      // list: {
-        songs : track
-      // }
-    })
-    // list.set({ songs : track });
-    // $scope.lists.$save(list);
+
+    var foo = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/");
+    var newChildRef = foo.push('songs');
+    key = newChildRef.key();
+     
+    arr.push(angular.copy(track));
+    var baz = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/" + key);
+    baz.set({'songs' : arr});
+    
+    //var arr = [angular.copy(track)];
+    $scope.songs = $firebaseArray(new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/" + key));
+    
   }
 })
 

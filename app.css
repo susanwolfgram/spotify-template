@@ -8,7 +8,6 @@ body {
 	background-color: #F8F8F8;
 	margin-top: 20px;
 	padding: 15px;
-	width: 260px;
 }
 
 .handle {
@@ -84,7 +83,7 @@ i:hover {
 }
 
 #searchedSongs {
-	margin-left: 50px;
+	margin-left: 40px;
 }
 
 ul {

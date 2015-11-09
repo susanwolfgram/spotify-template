@@ -79,6 +79,7 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
     $scope.userId = false
   }
 
+  //create new playlist
   $scope.create = function() {
     $scope.lists.$add({
       title: $scope.listName, 
@@ -95,11 +96,13 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
     }) 
   }
 
+  //like a playlist
   $scope.like = function(list) {
     list.likes++; 
     $scope.lists.$save(list);
   }
 
+  //uses Spotify API to return songs based on user search queries
   $scope.audioObject = {};
   $scope.getSongs = function() {
     $http.get(baseUrl + $scope.track).success(function(response){
@@ -109,6 +112,7 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
     })
   }
 
+  //plays preview of a song 
   $scope.play = function(song) {
     if($scope.currentSong == song) {
       $scope.audioObject.pause();
@@ -123,7 +127,7 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
     }
   }
 
-  var key; 
+  //adds a song to a playlist 
   $scope.addToList = function(list, track) {
       var song = angular.copy(track);
 

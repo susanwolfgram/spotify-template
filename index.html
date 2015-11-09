@@ -144,6 +144,7 @@
 										<li ng-repeat="song in songs" class="" title="{{song.name}}"><img src={{song.album.images[0].url}} height="45px" width="45px" ng-click="play(song.preview_url)" data-toggle="tooltip" title="Click to Sample" ng-click="play(song.preview_url)"/>{{song.name + ', by ' + song.artists[0].name}}</li>
 									</ul>
 								</div>
+								<hr /> 
 								<form name="songForm">
 									<div class="form-group">
 										<label>Search Spotify for songs to add to this playlist:</label>

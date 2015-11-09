@@ -45,7 +45,6 @@
 		
 		<!-- Container div -->
 		<div class="container" id="login">
-			
 			<!-- Sign-in/sign-up form: show if userId isn't defined -->
 			<form name="myForm" novalidate ng-show="!userId">
 				<div class="form-group">
@@ -83,7 +82,7 @@
 					<button ng-click="signIn()" ng-disabled="myForm.email.$invalid || myForm.password.$invalid" type="submit" class="btn btn-primary">Sign-in</button>
 				</div>
 			</form>
-
+			
 			<!-- Show tweets (if userId is defined) -->
 			<div ng-show="userId">
 
@@ -123,7 +122,7 @@
 				</div>
 
 				<!-- Show everyone's lists -->
-				<div class="col-md-9 listDisplay">
+				<div class="col-md-9 listDisplay" ng-show="userId">
 					<h1>Explore Playlists</h1>
 					<div ng-repeat="list in lists | orderBy : 'time'" class="listSections">
 						<div>

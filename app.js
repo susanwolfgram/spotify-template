@@ -20,8 +20,14 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
 
   $scope.listClicked = false; 
   $scope.clicked = function(list) {
+    $scope.songs = []; 
     $scope.track = ""; 
     $scope.tracks = ""; 
+    if (list.songs != 0) {
+      var baz = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/" + list.songs);      
+      var playlist = $firebaseArray(baz); 
+      $scope.songs = playlist;
+    }
   }
   $scope.authObj = $firebaseAuth(ref);
 
@@ -87,6 +93,7 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
       image: $scope.listImage, 
       userId: $scope.userId,
       likes: 0,
+      songs: 0, 
       time: Firebase.ServerValue.TIMESTAMP
     }).then(function() {
       $scope.listName = ""; 
@@ -127,17 +134,20 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
     }
   }
 
-  //adds a song to a playlist 
+  //adds a song to a playlist
   $scope.addToList = function(list, track) {
-      var song = angular.copy(track);
-      var foo = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/");      
-      var newChildRef = foo.push(song);
-      
-      var baz = new Firebase("https://crowd-play.firebaseio.com/lists");      
-      var dataSongs = baz.child(list.$id); 
-      console.log(dataSongs); 
-      var playlist = $firebaseArray(dataSongs); 
-      console.log(playlist);
+    if (list.songs == 0) {
+      var foo = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id);      
+      var newChildRef = foo.push([]);
+      list.songs = newChildRef.key();
+      $scope.lists.$save(list);  
+    } 
+    $scope.songs = []; 
+    var baz = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/" + list.songs);      
+    var newChild = baz.push(angular.copy(track));
+    var playlist = $firebaseArray(baz); 
+    $scope.songs = playlist;
+    console.log(playlist);      
   }
 })
 

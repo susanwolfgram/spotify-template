@@ -7,4 +7,4 @@ students.washington.edu/skwolf/info343/spotify-template
 <br />
 I received help from Mike. 
 <br />
-Yes I had trouble creating a Firebase Array for the song data that was nested inside the playlist. 
+Yes, I had trouble creating a Firebase Array for the song data that was nested inside the playlist. 

@@ -132,8 +132,9 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
       
       var baz = new Firebase("https://crowd-play.firebaseio.com/lists");      
       var dataSongs = baz.child(list.$id); 
-      $scope.playlist = $firebaseArray(dataSongs); 
-      console.log($scope.playlist);
+      console.log(dataSongs); 
+      var playlist = $firebaseArray(dataSongs); 
+      console.log(playlist);
   }
 })
 

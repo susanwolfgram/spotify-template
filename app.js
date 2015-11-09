@@ -6,31 +6,23 @@ var myApp = angular.module('myApp', ['firebase']);
 
 // Bind controller, passing in $scope, $firebaseAuth, $firebaseArray, $firebaseObject
 myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $firebaseObject, $http){
-      // Create a variable 'ref' to reference your firebase storage
-  var ref = new Firebase("https://crowd-play.firebaseio.com");
 
-      // Create references to store tweets and users
+  var ref = new Firebase("https://crowd-play.firebaseio.com");
+  
   var dataLists = ref.child('lists');
   var dataUsers = ref.child('users'); 
 
-      // Create a firebaseArray of your playlists, and store this as part of $scope
+  // Create a firebaseArray of your playlists, and store this as part of $scope
 
-      // Create a firebaseObject of your users, and store this as part of $scope
+  // Create a firebaseObject of your users, and store this as part of $scope
   $scope.lists = $firebaseArray(dataLists);
   $scope.users = $firebaseObject(dataUsers);
 
   $scope.listClicked = false; 
-  // $scope.myListsClicked = false; 
-  // $scope.myLists = [];
-  // $scope.showMyLists = function(userId) {
-  //   $scope.lists.forEach(function(userId) {
-  //     if (this.userId = userId) {
-  //       myLists.push(this);
-  //     }
-  //   })
-  //   $scope.myListsClicked = true; 
-  // }
-  
+  $scope.clicked = function(list) {
+    $scope.track = ""; 
+    $scope.tracks = ""; 
+  }
   $scope.authObj = $firebaseAuth(ref);
 
   // Test if already logged in
@@ -105,7 +97,6 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
 
   $scope.like = function(list) {
     list.likes++; 
-    console.log('test');
     $scope.lists.$save(list);
   }
 
@@ -134,23 +125,24 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
 
   var key = ""; 
   var arr = [];
+  $scope.firstSong = true; 
   $scope.addToList = function(list, track) {
-
+    
     var foo = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/");
-    var newChildRef = foo.push('songs');
+    var newChildRef = foo.push();
+      
     key = newChildRef.key();
-     
+
+    console.log(key); 
+    // var songs = $firebaseArray(new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/" + key));
+    // console.log(songs);
     arr.push(angular.copy(track));
+
     var baz = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/" + key);
     baz.set({'songs' : arr});
     
-    //var arr = [angular.copy(track)];
-    $scope.songs = $firebaseArray(new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/" + key));
+    // $scope.songs = $firebaseArray(new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/" + key));
     
   }
 })
 
-// Add tool tips to anything with a title property
-// $('body').tooltip({
-//     selector: '[title]'
-// });

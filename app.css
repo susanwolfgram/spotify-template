@@ -78,12 +78,27 @@ i:hover {
 	text-align: left;
 }
 
-#songList {
-	width: 400px;
+.playlist {
+	font-size: 20px;
+	margin-bottom: 20px;
+}
+
+#searchedSongs {
+	margin-left: 50px;
 }
 
 ul {
+	font-size: 15px;
 	list-style: none; 
+}
+
+ul img {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+ul img:hover {
+	cursor: pointer;
 }
 
 .userImg {

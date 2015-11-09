@@ -83,6 +83,10 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
   $scope.logOut = function() {
     $scope.authObj.$unauth()
     $scope.userId = false
+    $scope.handle = "";
+    $scope.userImage = "";
+    $scope.email = "";
+    $scope.password = ""; 
   }
 
   //create new playlist

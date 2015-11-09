@@ -20,7 +20,17 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
   $scope.users = $firebaseObject(dataUsers);
 
   $scope.listClicked = false; 
-    // Create authorization object that referes to firebase
+  // $scope.myListsClicked = false; 
+  // $scope.myLists = [];
+  // $scope.showMyLists = function(userId) {
+  //   $scope.lists.forEach(function(userId) {
+  //     if (this.userId = userId) {
+  //       myLists.push(this);
+  //     }
+  //   })
+  //   $scope.myListsClicked = true; 
+  // }
+  
   $scope.authObj = $firebaseAuth(ref);
 
   // Test if already logged in
@@ -45,7 +55,7 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
       $scope.userId = authData.uid;
       $scope.users[authData.uid] ={
         handle:$scope.handle, 
-        userImage:$scope.userImage,
+        userImage:$scope.userImage
       }
       $scope.users.$save()
     })

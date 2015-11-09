@@ -37,7 +37,7 @@
 			<div class="header log-out">
 				<p id="pageName">CrowdList
 					<span id="logout" ng-show="userId">{{users[userId].handle}}
-						<button ng-click="logOut()" class="btn btn-warning">Logout</button>
+						<img id="headerImg" ng-src="{{users[userId].userImage}}" height="32px" width="32px"></img><button ng-click="logOut()" class="btn btn-warning">Logout</button>
 					</span>
 				</p>	
 			</div>
@@ -64,7 +64,7 @@
 					<div class="userImg" ng-show="userImage">
 						<img ng-src="{{userImage}}" height="30px" width="30px">		
 					</div>					
-					<input name="img" class="form-control" ng-model="userImage">
+					<input required name="img" class="form-control" ng-model="userImage">
 				</div>
 
 				<!-- Bind model "email" to this input and make it required -->
@@ -94,19 +94,7 @@
 
 				<!-- Element for writing tweets -->
 				<div class="col-md-3">
-					<div>
-						<!-- Show image of current user -->
-						<div class="userStats">
-							<div class="statsImg"> 
-								<img ng-src="{{users[userId].userImage}}" height="100px" width="100px"></img>
-							</div>
-							<div>
-								<p>My Lists</p>
-								<div>
-									 <i class="fa fa-list fa-4x"></i>
-								</div>
-							</div>
-						</div>
+					
 						<!-- Form for creating new playlists -->
 						<div id="createNew">
 							<form name="newList" id="newList">
@@ -143,10 +131,8 @@
 				<!-- Show everyone's tweets! -->
 				<div class="col-md-9 listDisplay">
 					<h1>Explore Playlists</h1>
-					<!-- Use ng-repeat directive to repeat a div for each element in tweets -->
 					<div ng-repeat="list in lists | orderBy : 'time'" class="listSections">
 						<div>
-							<!-- Put an img tag that shows the userImage of that tweet -->
 							<img id="listImg" ng-click="clicked(list); listClicked? listClicked = false : listClicked = true" class="image" ng-src="{{list.image}}" height="100px" width="100px"></img>
 							<div class="listInfo">
 								<!-- Put in the twitter handle and time of tweet -->

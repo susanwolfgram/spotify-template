@@ -6,6 +6,7 @@ body {
 
 #createNew {
 	background-color: #F8F8F8;
+	margin-top: 20px;
 	padding: 15px;
 	width: 260px;
 }
@@ -24,6 +25,11 @@ header {
 
 .header {
 	text-align: right;
+}
+
+#headerImg {
+	border-radius: 5px;
+	margin-right: 5px;
 }
 
 i:hover {
@@ -76,13 +82,6 @@ i:hover {
 	width: 400px;
 }
 
-.statsImg {
-	float: left;
-	height: 100px;
-	margin-right: 20px;
-	width: 100px;
-}
-
 ul {
 	list-style: none; 
 }
@@ -94,15 +93,5 @@ ul {
 	 margin-top: -10px;
 	 overflow : hidden;
 	 width: 30px;
-}
-
-.userStats {
-	background-color: #F8F8F8;
-	font-size: 16px;
-	height: 150px;
-	margin-bottom: 30px;
-	margin-top: 20px;
-	padding: 20px;
-	width: 260px;
 }
 

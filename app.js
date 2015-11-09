@@ -130,7 +130,6 @@ myApp.controller('myCtrl', function($scope, $firebaseAuth, $firebaseArray, $fire
   //adds a song to a playlist 
   $scope.addToList = function(list, track) {
       var song = angular.copy(track);
-
       var foo = new Firebase("https://crowd-play.firebaseio.com/lists/" + list.$id + "/");      
       var newChildRef = foo.push(song);
       
